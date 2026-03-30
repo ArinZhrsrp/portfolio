@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Personal Projects | Ungku Shirin Zahra</title>
+    <link rel="stylesheet" href="assets/css/styles.css" />
+    <script defer src="assets/js/portfolio-data.js"></script>
+    <script defer src="assets/js/site.js"></script>
+  </head>
+  <body data-page="personal" data-project-ownership="personal">
+    <div class="page">
+      <div class="orb orb-1 orb-line"></div>
+      <div class="orb orb-2 orb-line"></div>
+      <main class="container">
+        <header class="shell topbar">
+          <div class="topbar-inner">
+            <a class="brand" href="home.html#home">
+              <div class="avatar-badge">USZ</div>
+              <div>
+                <p class="eyebrow-top">Software Developer Portfolio</p>
+                <h1 class="brand-title">Ungku Shirin Zahra Portfolio</h1>
+              </div>
+            </a>
+
+            <button
+              class="menu-toggle"
+              type="button"
+              aria-expanded="false"
+              aria-controls="siteNav"
+              aria-label="Toggle navigation menu"
+            >
+              <span class="menu-toggle-lines" aria-hidden="true">
+                <span></span>
+                <span></span>
+                <span></span>
+              </span>
+            </button>
+
+            <nav class="nav" id="siteNav">
+              <a class="nav-link" data-nav="home" href="home.html#home">Home</a>
+              <a class="nav-link" href="home.html#about">About</a>
+              <a class="nav-link" data-nav="work" href="work.html">Work</a>
+              <a class="nav-link" data-nav="personal" href="personal.html">Personal</a>
+              <a class="nav-link" href="home.html#skills">Skills</a>
+              <a class="nav-link" href="home.html#experience">Experience</a>
+              <a class="nav-link" href="home.html#contact">Contact</a>
+              <a class="nav-link coral" href="home.html#contact">Let's Talk</a>
+            </nav>
+          </div>
+        </header>
+
+        <div class="content">
+          <section class="hero-outer">
+            <div class="hero-inner">
+              <div class="hero-pills">
+                <span class="pill coral">Personal Projects</span>
+                <span class="pill">Independent Builds</span>
+              </div>
+
+              <div class="page-intro">
+                <p class="section-eyebrow">Project Library</p>
+                <h2 class="page-title">Personal builds with code-first access.</h2>
+                <p class="page-copy">
+                  This collection is for self-initiated projects. Each card can
+                  show both the code link and the live site when one exists, so
+                  the work is easier to explore from both sides.
+                </p>
+
+                <div class="page-actions">
+                  <a class="action-btn coral" href="home.html#projects">
+                    Back to Overview
+                    <span class="icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6" /></svg>
+                    </span>
+                  </a>
+                  <a class="action-btn" href="work.html">
+                    Work Projects
+                    <span class="icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6" /></svg>
+                    </span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="section-frame">
+            <div class="section-head">
+              <div>
+                <p class="section-eyebrow">Collection</p>
+                <h3 class="section-title">Personal Projects</h3>
+              </div>
+              <a class="archive-btn" href="home.html#contact">Let's Talk</a>
+            </div>
+
+            <p class="section-copy">
+              Personal projects are where I explore ideas more freely, test new
+              stacks, and refine the small interaction details. Platform filters
+              are ready here as new web, mobile, or desktop builds are added.
+            </p>
+
+            <div class="project-filter-pills" id="projectFilters"></div>
+            <div class="projects-grid" id="projectsGrid"></div>
+          </section>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
