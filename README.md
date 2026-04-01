@@ -4,39 +4,54 @@ Static multi-page portfolio website for Ungku Shirin Zahra.
 
 ## Overview
 
-This project is a plain HTML, CSS, and JavaScript portfolio with shared assets and data-driven content.
+This project is a plain HTML, CSS, and JavaScript portfolio with page-owned
+entry files and shared modules.
 
-There is no build step and no framework. The site is maintained by editing:
-
-- shared content in `assets/js/portfolio-data.js`
-- shared UI logic in `assets/js/site.js`
-- shared styles in `assets/css/styles.css`
+There is no build step and no framework.
 
 ## Pages
 
 - `index.html`
-  - Redirects to `home.html`
+  - Redirect entry page
 - `home.html`
   - Main landing page
 - `work.html`
   - Work project listing
 - `personal.html`
   - Personal project listing
+- `index.next.html`
+  - Alternate landing-page variant
 
 ## Project Structure
 
 ```text
 Portfolio Website/
+|- index.html
 |- home.html
 |- work.html
 |- personal.html
-|- index.html
+|- index.next.html
 |- assets/
 |  |- css/
-|  |  |- styles.css
+|  |  |- pages/
+|  |  |  |- index.css
+|  |  |  |- home.css
+|  |  |  |- work.css
+|  |  |  |- personal.css
+|  |  |  |- index.next.css
+|  |  |- shared/
+|  |     |- site.css
 |  |- js/
-|  |  |- portfolio-data.js
-|  |  |- site.js
+|  |  |- data/
+|  |  |  |- portfolio-data.js
+|  |  |- pages/
+|  |  |  |- index.js
+|  |  |  |- home.js
+|  |  |  |- work.js
+|  |  |  |- personal.js
+|  |  |  |- index.next.js
+|  |  |- shared/
+|  |     |- site.js
 |  |- media/
 |     |- profilePic.jpg
 |     |- Credex.png
@@ -47,29 +62,22 @@ Portfolio Website/
 
 ## How It Works
 
-All main content is stored in `assets/js/portfolio-data.js`, including:
+Each HTML file now loads:
 
-- profile and contact info
-- hero image path
-- skills
-- work and personal projects
-- experience
-- involvement history
+- its own stylesheet from `assets/css/pages/`
+- its own JavaScript entry file from `assets/js/pages/`
 
-`assets/js/site.js` reads that data and renders:
+Shared styling lives in `assets/css/shared/site.css`.
 
-- project overview cards on `home.html`
-- filtered project cards on `work.html`
-- filtered project cards on `personal.html`
-- shared mobile menu behavior
-- hero/profile image
-- scroll-to-top button
+Shared rendering and UI helpers live in `assets/js/shared/site.js`.
+
+Shared portfolio content lives in `assets/js/data/portfolio-data.js`.
 
 ## Editing Content
 
 ### Update personal info
 
-Edit the `site` object in `assets/js/portfolio-data.js`.
+Edit the `site` object in `assets/js/data/portfolio-data.js`.
 
 Useful fields:
 
@@ -82,7 +90,7 @@ Useful fields:
 
 ### Update projects
 
-Edit the `projects` array in `assets/js/portfolio-data.js`.
+Edit the `projects` array in `assets/js/data/portfolio-data.js`.
 
 Each project can include:
 
@@ -103,42 +111,30 @@ Each project can include:
 }
 ```
 
-### Work vs personal button behavior
+### Update page behavior
 
-This is handled automatically by `assets/js/site.js`:
+- `assets/js/pages/home.js`
+  - home page rendering
+- `assets/js/pages/work.js`
+  - work page project filters
+- `assets/js/pages/personal.js`
+  - personal page project filters
+- `assets/js/pages/index.next.js`
+  - alternate landing page rendering
+- `assets/js/pages/index.js`
+  - redirect behavior for `index.html`
 
-- work projects show `View Site` only
-- personal projects show `View Code`
-- personal projects also show `Visit Site` if `siteLink` exists
+### Update styling
+
+- `assets/css/shared/site.css`
+  - shared layout, components, and responsive rules
+- `assets/css/pages/*.css`
+  - page-owned CSS entry files
 
 ### Update images
 
-Place portfolio images inside `assets/media/`.
-
-Current usage:
-
-- profile image: `assets/media/profilePic.jpg`
-- project images: `assets/media/*.png`
-
-After adding a new image, update the matching path in `assets/js/portfolio-data.js`.
-
-### Update styles
-
-Edit `assets/css/styles.css` for:
-
-- layout
-- spacing
-- colors
-- typography
-- responsive behavior
-- sticky header
-- scroll-to-top button
-
-## Work Project Disclaimer
-
-The work-project disclaimer is written directly in `work.html`.
-
-If you want to change that wording, edit the disclaimer block in that file.
+Place portfolio images inside `assets/media/`, then update the matching path in
+`assets/js/data/portfolio-data.js`.
 
 ## Running Locally
 
@@ -161,7 +157,9 @@ http://localhost:8000
 
 ## Maintenance Notes
 
-- Keep shared content in `assets/js/portfolio-data.js` instead of duplicating text in each page.
-- Keep shared behavior in `assets/js/site.js`.
+- Each HTML page now has its own CSS and JS entry file.
+- Shared reusable code is kept in the `shared/` folders.
+- Shared content stays in `assets/js/data/portfolio-data.js`.
 - Keep new images in `assets/media/`.
-- If you add more platforms later, reuse `mobile`, `web`, and `desktop` for consistent filtering.
+- If you add more platforms later, reuse `mobile`, `web`, and `desktop` for
+  consistent filtering.
