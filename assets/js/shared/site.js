@@ -31,6 +31,14 @@ export function iconSvg(type) {
   return icons[type] || icons.device;
 }
 
+function resolveStatValue(data, item) {
+  if (item.key === "projects") {
+    return String(data.projects?.length ?? 0);
+  }
+
+  return item.value ?? "";
+}
+
 function isExternalLink(href) {
   return /^https?:\/\//i.test(href);
 }
@@ -77,7 +85,7 @@ export function renderStats(data) {
       .map(
         (item) => `
           <div class="stat-chip">
-            <p class="stat-value">${item.value}</p>
+            <p class="stat-value">${resolveStatValue(data, item)}</p>
             <p class="stat-label">${item.label}</p>
           </div>
         `,

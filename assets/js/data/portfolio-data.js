@@ -41,7 +41,7 @@ export const portfolioData = {
   },
   stats: [
     { value: "2+", label: "Years Experience" },
-    { value: "24", label: "Projects Delivered" },
+    { key: "projects", label: "Projects Delivered" },
     { value: "Agile", label: "Development Workflow" },
   ],
   skills: [
