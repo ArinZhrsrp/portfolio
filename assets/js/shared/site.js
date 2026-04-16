@@ -413,6 +413,29 @@ export function setupContactForm() {
     });
   }
 
+export function setupSiteFooter(data) {
+    const container = document.querySelector(".container");
+
+    if (!container || container.querySelector(".site-footer")) {
+      return;
+    }
+
+    const version = data?.site?.version;
+    const year = new Date().getFullYear();
+
+    const footer = document.createElement("footer");
+    footer.className = "site-footer";
+    footer.setAttribute("aria-label", "Site footer");
+    footer.innerHTML = `
+      <p class="site-footer-meta">
+        <span>&copy; ${year}</span>
+        ${version ? `<span>Version ${version}</span>` : ""}
+      </p>
+    `;
+
+    container.appendChild(footer);
+  }
+
 export function setActiveNav(activeKey = document.body.dataset.page) {
     document.querySelectorAll(".nav-link[data-nav]").forEach((link) => {
       link.classList.toggle("active", link.dataset.nav === activeKey);

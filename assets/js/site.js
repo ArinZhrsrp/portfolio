@@ -15,5 +15,6 @@ Promise.all([
   site.setupContactForm();
   site.setupMobileMenu();
   site.setupScrollTopButton();
+  site.setupSiteFooter(portfolioData);
   site.setActiveNav();
 });

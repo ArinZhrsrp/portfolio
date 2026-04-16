@@ -1068,6 +1068,30 @@ code {
   transform: translateY(0);
 }
 
+.site-footer {
+  margin-top: 28px;
+  padding: 4px 0 0;
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  text-align: center;
+}
+
+.site-footer-meta {
+  margin: 0;
+}
+
+.site-footer-meta {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
 .icon {
   width: 18px;
   height: 18px;
@@ -1247,6 +1271,15 @@ code {
     bottom: 14px;
     width: 48px;
     height: 48px;
+  }
+
+  .site-footer {
+    padding-top: 2px;
+  }
+
+  .site-footer-meta {
+    justify-content: center;
+    gap: 10px;
   }
 
   .project-directory-item {

@@ -9,6 +9,7 @@ import {
   setupContactForm,
   setupHeroImage,
   setupMobileMenu,
+  setupSiteFooter,
   setupScrollTopButton,
 } from "../shared/site.js";
 
@@ -21,4 +22,5 @@ setupHeroImage(portfolioData);
 setupContactForm();
 setupMobileMenu();
 setupScrollTopButton();
+setupSiteFooter(portfolioData);
 setActiveNav();
