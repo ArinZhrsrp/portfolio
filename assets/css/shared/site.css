@@ -10,6 +10,9 @@
   --muted: #616360;
   --line: #3c3d3d;
   --white-ring: rgba(255, 255, 255, 0.6);
+  --watermark-image-light: url("../../media/watermark-black.png");
+  --watermark-image-dark: url("../../media/watermark-white.png");
+  --watermark-image: var(--watermark-image-light);
 }
 
 * {
@@ -61,12 +64,31 @@ code {
   position: relative;
   min-height: 100vh;
   overflow-x: hidden;
+  isolation: isolate;
+}
+
+.page::after {
+  content: "";
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: clamp(320px, 52vw, 900px);
+  aspect-ratio: 2562 / 1772;
+  background-image: var(--watermark-image);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  transform: translate(-50%, -50%);
+  opacity: 0.05;
+  pointer-events: none;
+  z-index: 80;
 }
 
 .orb {
   position: fixed;
   pointer-events: none;
   border-radius: 999px;
+  z-index: 0;
 }
 
 .orb-line {
@@ -103,6 +125,7 @@ code {
 
 .container {
   position: relative;
+  z-index: 1;
   max-width: 1180px;
   margin: 0 auto;
   padding: 20px 16px 40px;
@@ -1036,7 +1059,7 @@ code {
     opacity 0.2s ease,
     visibility 0.2s ease,
     transform 0.2s ease;
-  z-index: 25;
+  z-index: 60;
 }
 
 .scroll-top-btn.is-visible {
