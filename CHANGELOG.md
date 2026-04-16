@@ -7,6 +7,10 @@ the early history was not tagged with release versions.
 
 ## [Unreleased]
 
+No unreleased changes yet.
+
+## [v1.0.1] - 2026-04-17
+
 ### Added
 
 - Added [VERSIONING.md](VERSIONING.md) with a quick guide for updating the
@@ -14,6 +18,8 @@ the early history was not tagged with release versions.
 
 ### Changed
 
+- Replaced the floating version badge with a shared plain-text footer centered
+  at the bottom of each page.
 - Updated the home-page project stat to auto-calculate from the total number
   of work and personal projects in `portfolioData.projects`.
 
