@@ -294,6 +294,26 @@ export function renderInvolvement(data) {
 
       setGalleryActive(gallery, nextIndex);
     });
+
+    grid.addEventListener("keydown", (event) => {
+      if (event.key !== "Enter" && event.key !== " ") {
+        return;
+      }
+
+      const dot = event.target.closest("[data-gallery-dot]");
+
+      if (!dot) {
+        return;
+      }
+
+      event.preventDefault();
+
+      const gallery = dot.closest("[data-gallery]");
+
+      if (gallery) {
+        setGalleryActive(gallery, Number(dot.dataset.galleryDot));
+      }
+    });
   }
 
   function projectBadgeMarkup(project) {

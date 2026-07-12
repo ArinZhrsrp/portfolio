@@ -7,7 +7,13 @@ the early history was not tagged with release versions.
 
 ## [Unreleased]
 
-No unreleased changes yet.
+### Changed
+
+- Replaced the single `image` field on project entries with an `images` array
+  in `assets/js/data/portfolio-data.js`, allowing more than one screenshot per
+  project.
+- Project cards now render a gallery with prev/next arrows and dot navigation
+  when a project has more than one image.
 
 ## [v1.0.1] - 2026-04-17
 

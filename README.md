@@ -107,9 +107,13 @@ Each project can include:
   accent: "teal", // or "coral"
   siteLink: "https://example.com",
   repoLink: "https://github.com/example/repo",
-  image: "assets/media/example.png"
+  images: ["assets/media/example.png", "assets/media/example-2.png"]
 }
 ```
+
+`images` accepts one or more paths. When a project has more than one image,
+its card automatically shows prev/next arrows and dot navigation to browse
+the gallery.
 
 ### Update page behavior
 
