@@ -66,7 +66,7 @@ export const portfolioData = {
       accent: "teal",
       siteLink: "https://credex.my/",
       repoLink: "",
-      image: "assets/media/Credex.png",
+      images: ["assets/media/Credex.png"],
     },
     {
       id: "etc-black",
@@ -81,7 +81,7 @@ export const portfolioData = {
       accent: "coral",
       siteLink: "https://etc.bayo.my/",
       repoLink: "",
-      image: "assets/media/etcBlack.png",
+      images: ["assets/media/etcBlack.png"],
     },
     {
       id: "construx",
@@ -96,7 +96,7 @@ export const portfolioData = {
       accent: "teal",
       siteLink: "https://cidb.bayo.my/",
       repoLink: "",
-      image: "assets/media/Construx.png",
+      images: ["assets/media/Construx.png"],
     },
     {
       id: "pomopaw",
@@ -111,7 +111,7 @@ export const portfolioData = {
       accent: "coral",
       siteLink: "",
       repoLink: "https://github.com/ArinZhrsrp/",
-      image: "assets/media/pomopaw.png",
+      images: ["assets/media/pomopaw.png"],
     },
   ],
   experience: [

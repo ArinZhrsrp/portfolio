@@ -198,17 +198,102 @@ export function renderInvolvement(data) {
 
   function projectPreviewMarkup(project) {
     const accentClass = project.accent === "coral" ? "coral-soft" : "teal-soft";
-    const media = project.image
-      ? `<img class="project-preview-image" src="${project.image}" alt="${project.title} project preview" />`
-      : `<div class="project-preview-placeholder">${project.title}</div>`;
+    const images = project.images && project.images.length ? project.images : [];
+
+    if (!images.length) {
+      return `
+        <div class="project-preview ${accentClass}">
+          <div class="project-preview-inner project-preview-media">
+            <div class="project-preview-placeholder">${project.title}</div>
+          </div>
+        </div>
+      `;
+    }
+
+    const slides = images
+      .map(
+        (src, index) => `
+          <img
+            class="project-preview-image gallery-slide${index === 0 ? " active" : ""}"
+            src="${src}"
+            alt="${project.title} project preview ${index + 1}"
+          />
+        `,
+      )
+      .join("");
+
+    const controls =
+      images.length > 1
+        ? `
+          <button class="gallery-nav prev" type="button" data-gallery-nav="prev" aria-label="Previous image">‹</button>
+          <button class="gallery-nav next" type="button" data-gallery-nav="next" aria-label="Next image">›</button>
+          <div class="gallery-dots">
+            ${images
+              .map(
+                (_, index) => `
+                  <span
+                    class="gallery-dot${index === 0 ? " active" : ""}"
+                    data-gallery-dot="${index}"
+                    role="button"
+                    tabindex="0"
+                    aria-label="Show image ${index + 1}"
+                  ></span>
+                `,
+              )
+              .join("")}
+          </div>
+        `
+        : "";
 
     return `
       <div class="project-preview ${accentClass}">
-        <div class="project-preview-inner project-preview-media">
-          ${media}
+        <div class="project-preview-inner project-preview-media" data-gallery>
+          <div class="gallery-track">${slides}</div>
+          ${controls}
         </div>
       </div>
     `;
+  }
+
+  function setGalleryActive(gallery, nextIndex) {
+    const slides = gallery.querySelectorAll(".gallery-slide");
+    const dots = gallery.querySelectorAll(".gallery-dot");
+
+    slides.forEach((slide, index) => slide.classList.toggle("active", index === nextIndex));
+    dots.forEach((dot, index) => dot.classList.toggle("active", index === nextIndex));
+  }
+
+  function setupGalleryControls(grid) {
+    grid.addEventListener("click", (event) => {
+      const gallery = event.target.closest("[data-gallery]");
+
+      if (!gallery) {
+        return;
+      }
+
+      const nav = event.target.closest("[data-gallery-nav]");
+      const dot = event.target.closest("[data-gallery-dot]");
+
+      if (!nav && !dot) {
+        return;
+      }
+
+      const slides = gallery.querySelectorAll(".gallery-slide");
+      const currentIndex = Array.from(slides).findIndex((slide) =>
+        slide.classList.contains("active"),
+      );
+
+      let nextIndex = currentIndex;
+
+      if (dot) {
+        nextIndex = Number(dot.dataset.galleryDot);
+      } else if (nav) {
+        const direction = nav.dataset.galleryNav === "next" ? 1 : -1;
+        nextIndex = (currentIndex + direction + slides.length) % slides.length;
+      }
+
+      setGalleryActive(gallery, nextIndex);
+    });
   }
 
   function projectBadgeMarkup(project) {
@@ -329,6 +414,8 @@ export function renderProjectsPage(data) {
     if (!ownership || !grid) {
       return;
     }
+
+    setupGalleryControls(grid);
 
     const projects = data.projects.filter((project) => project.ownership === ownership);
     const platformFilters = ["all", ...uniquePlatforms(projects)];
