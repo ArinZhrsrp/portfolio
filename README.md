@@ -44,6 +44,12 @@ Portfolio Website/
 |  |- js/
 |  |  |- data/
 |  |  |  |- portfolio-data.js
+|  |  |  |- projects/
+|  |  |     |- credex.js
+|  |  |     |- etc-black.js
+|  |  |     |- construx.js
+|  |  |     |- pomopaw.js
+|  |  |     |- candid-prompt.js
 |  |  |- pages/
 |  |  |  |- index.js
 |  |  |  |- home.js
@@ -54,24 +60,38 @@ Portfolio Website/
 |  |     |- site.js
 |  |- media/
 |     |- profilePic.jpg
-|     |- Credex.png
-|     |- etcBlack.png
-|     |- Construx.png
-|     |- pomopaw.png
+|     |- watermark-Black.png
+|     |- watermark-White.png
+|     |- projects/
+|        |- credex/1.png
+|        |- etc-black/1.png
+|        |- construx/1.png
+|        |- pomopaw/1.png
+|        |- candid-prompt/1.png ... 4.png
 ```
 
 ## How It Works
 
-Each HTML file now loads:
+Each HTML file now loads (in this order, all as plain `<script defer>` tags):
 
-- its own stylesheet from `assets/css/pages/`
-- its own JavaScript entry file from `assets/js/pages/`
+1. its own stylesheet from `assets/css/pages/`
+2. `assets/js/data/portfolio-data.js` — site-wide content, with an empty
+   `projects: []` array
+3. one `<script>` per file under `assets/js/data/projects/`, each of which
+   pushes its project object into `portfolioData.projects`
+4. `assets/js/shared/site.js` — shared rendering/UI helpers
+5. its own JavaScript entry file from `assets/js/pages/`, which calls the
+   shared render functions
 
 Shared styling lives in `assets/css/shared/site.css`.
 
-Shared rendering and UI helpers live in `assets/js/shared/site.js`.
-
-Shared portfolio content lives in `assets/js/data/portfolio-data.js`.
+None of these are ES modules (no `type="module"`, no `import`/`export`).
+Browsers block ES module loading when a page is opened directly via
+`file://` (double-clicking the HTML file), which used to leave the page
+looking broken (no images, no dynamic sections) outside of a local server.
+Plain scripts with the `defer` attribute avoid that restriction while still
+executing in document order after the HTML has parsed — so double-clicking
+any page file now works the same as serving it.
 
 ## Editing Content
 
@@ -90,12 +110,12 @@ Useful fields:
 
 ### Update projects
 
-Edit the `projects` array in `assets/js/data/portfolio-data.js`.
-
-Each project can include:
+Each project lives in its own file under `assets/js/data/projects/`, named
+after its `id` (e.g. `assets/js/data/projects/credex.js`). To edit an
+existing project, edit its file directly:
 
 ```js
-{
+portfolioData.projects.push({
   id: "project-id",
   title: "Project Name",
   ownership: "work", // or "personal"
@@ -107,13 +127,34 @@ Each project can include:
   accent: "teal", // or "coral"
   siteLink: "https://example.com",
   repoLink: "https://github.com/example/repo",
-  images: ["assets/media/example.png", "assets/media/example-2.png"]
-}
+  images: [
+    "assets/media/projects/project-id/1.png",
+    "assets/media/projects/project-id/2.png",
+  ],
+});
 ```
 
 `images` accepts one or more paths. When a project has more than one image,
 its card automatically shows prev/next arrows and dot navigation to browse
 the gallery.
+
+#### Add a new project
+
+1. Create `assets/js/data/projects/<project-id>.js` with the object shown
+   above.
+2. Put its screenshots in `assets/media/projects/<project-id>/`.
+3. Add one line loading the new file in **every** HTML page that lists
+   projects — `home.html`, `work.html`, `personal.html`, and
+   `index.next.html` — next to the other project `<script>` tags:
+
+   ```html
+   <script src="assets/js/data/projects/<project-id>.js" defer></script>
+   ```
+
+   This manual step exists because the site has no build step or server-side
+   includes to fetch project files automatically; a plain `<script>` tag is
+   the only way to load a local file that also works when the page is opened
+   directly via `file://`.
 
 ### Update page behavior
 
@@ -137,17 +178,19 @@ the gallery.
 
 ### Update images
 
-Place portfolio images inside `assets/media/`, then update the matching path in
-`assets/js/data/portfolio-data.js`.
+Place project screenshots inside `assets/media/projects/<project-id>/`, then
+reference the matching paths in that project's `images` array in
+`assets/js/data/projects/<project-id>.js`. Site-level images that aren't tied
+to one project (profile photo, watermark) stay directly under
+`assets/media/`.
 
 ## Running Locally
 
-Because this is a static site, you can:
+Because this is a static site with no build step and no ES modules, you can
+simply open any HTML file directly in a browser (double-click it, or open the
+`file://` path) and everything — images, project cards, galleries — works as-is.
 
-1. Open `index.html` in a browser, or
-2. Run a small local server
-
-Example with Python:
+A local server is optional, e.g. with Python:
 
 ```bash
 python -m http.server 8000
@@ -163,7 +206,15 @@ http://localhost:8000
 
 - Each HTML page now has its own CSS and JS entry file.
 - Shared reusable code is kept in the `shared/` folders.
-- Shared content stays in `assets/js/data/portfolio-data.js`.
-- Keep new images in `assets/media/`.
+- Site-wide content (profile info, collections, stats, skills, experience,
+  involvement, notes) stays in `assets/js/data/portfolio-data.js`.
+- Each project's data lives in its own file under
+  `assets/js/data/projects/`, and its images live in their own folder under
+  `assets/media/projects/`. See [Add a new project](#add-a-new-project) for
+  the steps to wire up a new one.
 - If you add more platforms later, reuse `mobile`, `web`, and `desktop` for
   consistent filtering.
+- All script tags are plain `<script defer>` (no `type="module"`) so pages
+  keep working when opened directly via `file://`. Don't reintroduce
+  `import`/`export` in page-loaded scripts without also reverting to a local
+  server for previewing.
