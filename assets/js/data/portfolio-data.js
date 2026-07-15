@@ -1,4 +1,4 @@
-export const portfolioData = {
+const portfolioData = {
   site: {
     shortName: "USZ",
     eyebrow: "Software Developer Portfolio",

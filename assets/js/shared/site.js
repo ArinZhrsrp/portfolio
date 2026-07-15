@@ -27,7 +27,7 @@ const platformOrder = {
   desktop: 2,
 };
 
-export function iconSvg(type) {
+function iconSvg(type) {
   return icons[type] || icons.device;
 }
 
@@ -74,7 +74,7 @@ function actionLink(label, href, className, iconType) {
   `;
 }
 
-export function renderStats(data) {
+function renderStats(data) {
     const grid = document.getElementById("statsGrid");
 
     if (!grid) {
@@ -93,7 +93,7 @@ export function renderStats(data) {
       .join("");
   }
 
-export function renderSkills(data) {
+function renderSkills(data) {
     const grid = document.getElementById("skillsGrid");
 
     if (!grid) {
@@ -115,7 +115,7 @@ export function renderSkills(data) {
       .join("");
   }
 
-export function renderExperience(data) {
+function renderExperience(data) {
     const list = document.getElementById("experienceList");
 
     if (!list) {
@@ -142,7 +142,7 @@ export function renderExperience(data) {
       .join("");
   }
 
-export function renderInvolvement(data) {
+function renderInvolvement(data) {
     const grid = document.getElementById("involvementGrid");
 
     if (!grid) {
@@ -169,7 +169,7 @@ export function renderInvolvement(data) {
       .join("");
   }
 
-  export function renderNotes(data) {
+  function renderNotes(data) {
     const grid = document.getElementById("notesGrid");
 
     if (!grid) {
@@ -381,7 +381,7 @@ export function renderInvolvement(data) {
     `;
   }
 
-export function renderProjectDirectory(data) {
+function renderProjectDirectory(data) {
     const grid = document.getElementById("projectDirectoryGrid");
 
     if (!grid) {
@@ -426,7 +426,7 @@ export function renderProjectDirectory(data) {
       .join("");
   }
 
-export function renderProjectsPage(data) {
+function renderProjectsPage(data) {
     const ownership = document.body.dataset.projectOwnership;
     const grid = document.getElementById("projectsGrid");
     const filters = document.getElementById("projectFilters");
@@ -495,7 +495,7 @@ export function renderProjectsPage(data) {
     renderGrid();
   }
 
-export function setupHeroImage(data) {
+function setupHeroImage(data) {
     const placeholder = document.getElementById("heroImagePlaceholder");
 
     if (!placeholder) {
@@ -510,7 +510,7 @@ export function setupHeroImage(data) {
     placeholder.innerHTML = `<span>${data.site.heroImageLabel}</span>`;
   }
 
-export function setupContactForm() {
+function setupContactForm() {
     const form = document.getElementById("contactForm");
 
     if (!form) {
@@ -528,7 +528,7 @@ export function setupContactForm() {
     });
   }
 
-export function setupSiteFooter(data) {
+function setupSiteFooter(data) {
     const container = document.querySelector(".container");
 
     if (!container || container.querySelector(".site-footer")) {
@@ -551,13 +551,13 @@ export function setupSiteFooter(data) {
     container.appendChild(footer);
   }
 
-export function setActiveNav(activeKey = document.body.dataset.page) {
+function setActiveNav(activeKey = document.body.dataset.page) {
     document.querySelectorAll(".nav-link[data-nav]").forEach((link) => {
       link.classList.toggle("active", link.dataset.nav === activeKey);
     });
   }
 
-export function setupMobileMenu() {
+function setupMobileMenu() {
     const topbar = document.querySelector(".topbar");
     const toggle = document.querySelector(".menu-toggle");
     const nav = document.getElementById("siteNav");
@@ -603,7 +603,7 @@ export function setupMobileMenu() {
     });
   }
 
-export function setupScrollTopButton() {
+function setupScrollTopButton() {
     const button = document.createElement("button");
     button.type = "button";
     button.className = "scroll-top-btn";
