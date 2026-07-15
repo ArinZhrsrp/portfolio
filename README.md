@@ -59,6 +59,7 @@ Portfolio Website/
 |  |  |- shared/
 |  |     |- site.js
 |  |- media/
+|     |- favicon.svg
 |     |- profilePic.jpg
 |     |- watermark-Black.png
 |     |- watermark-White.png
@@ -218,3 +219,8 @@ http://localhost:8000
   keep working when opened directly via `file://`. Don't reintroduce
   `import`/`export` in page-loaded scripts without also reverting to a local
   server for previewing.
+- The favicon is `assets/media/favicon.svg`, an emoji rendered inside an
+  inline SVG `<text>` element — to change it, just swap the emoji character
+  in that file. It's linked from the `<head>` of all five HTML pages, so no
+  other file needs to change. Browsers cache favicons aggressively; a hard
+  refresh may be needed to see an update.

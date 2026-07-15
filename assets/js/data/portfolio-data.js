@@ -3,7 +3,7 @@ const portfolioData = {
     shortName: "USZ",
     eyebrow: "Software Developer Portfolio",
     title: "Ungku Shirin Zahra Portfolio",
-    version: "v1.1.0",
+    version: "v1.1.1",
     heroTitle:
       "Building reliable mobile apps with Flutter & real-world integration.",
     heroSummary:

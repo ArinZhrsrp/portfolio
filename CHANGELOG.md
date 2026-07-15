@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 Pre-`v1.0.0` version numbers below are inferred from commit milestones because
 the early history was not tagged with release versions.
 
+## [v1.1.1] - 2026-07-15
+
+### Added
+
+- Added a site favicon (`assets/media/favicon.svg`, a butterfly emoji) linked
+  from all five HTML pages.
+- Added a deployed `siteLink` for the PomoPaw project
+  (`https://pomopaw.vercel.app/`), so its card now shows a "Visit Site" link
+  alongside "View Code".
+
 ## [v1.1.0] - 2026-07-15
 
 ### Added
