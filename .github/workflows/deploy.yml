@@ -25,28 +25,34 @@ jobs:
         run: |
           set -euo pipefail
 
-          TIMESTAMP=$(date +%s)
+          # Generate timestamp
+          export TIMESTAMP=$(date +%s)
 
-          export TIMESTAMP
-
+          # Create request body
           printf '{"repository":"ArinZhrsrp/portfolio","branch":"main","commit":"%s"}' \
             "$COMMIT_SHA" > request.json
 
+          # Generate HMAC-SHA256 signature
           SIGNATURE=$(python3 -c '
-          import hashlib, hmac, os
+          import hashlib
+          import hmac
+          import os
           from pathlib import Path
 
           message = (
               os.environ["TIMESTAMP"] + "."
           ).encode() + Path("request.json").read_bytes()
 
-          print(hmac.new(
+          signature = hmac.new(
               os.environ["DEPLOY_SECRET"].encode(),
               message,
               hashlib.sha256
-          ).hexdigest())
+          ).hexdigest()
+
+          print(signature)
           ')
 
+          # Send authenticated POST request
           HTTP_CODE=$(curl \
             --silent \
             --show-error \
@@ -63,7 +69,7 @@ jobs:
           echo "HTTP Status: $HTTP_CODE"
 
           if [ "$HTTP_CODE" != "200" ]; then
-            echo "HMAC verification failed"
+            echo "HMAC verification failed (HTTP $HTTP_CODE)"
             exit 1
           fi
 
