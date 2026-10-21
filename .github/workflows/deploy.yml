@@ -11,17 +11,41 @@ permissions:
   contents: read
 
 jobs:
-  test-connection:
-    name: Test KOM.CC Connection
+  test-hmac:
+    name: Test Secure Deployment
     runs-on: ubuntu-latest
 
     steps:
-      - name: Test HTTPS endpoint
+      - name: Test HMAC authentication
         env:
           DEPLOY_USERNAME: ${{ secrets.DEPLOY_USERNAME }}
           DEPLOY_PASSWORD: ${{ secrets.DEPLOY_PASSWORD }}
+          DEPLOY_SECRET: ${{ secrets.DEPLOY_SECRET }}
+          COMMIT_SHA: ${{ github.sha }}
         run: |
           set -euo pipefail
+
+          TIMESTAMP=$(date +%s)
+
+          export TIMESTAMP
+
+          printf '{"repository":"ArinZhrsrp/portfolio","branch":"main","commit":"%s"}' \
+            "$COMMIT_SHA" > request.json
+
+          SIGNATURE=$(python3 -c '
+          import hashlib, hmac, os
+          from pathlib import Path
+
+          message = (
+              os.environ["TIMESTAMP"] + "."
+          ).encode() + Path("request.json").read_bytes()
+
+          print(hmac.new(
+              os.environ["DEPLOY_SECRET"].encode(),
+              message,
+              hashlib.sha256
+          ).hexdigest())
+          ')
 
           HTTP_CODE=$(curl \
             --silent \
@@ -29,16 +53,19 @@ jobs:
             --output response.json \
             --write-out "%{http_code}" \
             --user "$DEPLOY_USERNAME:$DEPLOY_PASSWORD" \
+            --header "Content-Type: application/json" \
+            --header "X-Deploy-Timestamp: $TIMESTAMP" \
+            --header "X-Deploy-Signature: $SIGNATURE" \
+            --data-binary @request.json \
             --max-time 30 \
             "https://shirinzahra-portfolio.sfworks.top/_deploy/deploy.php")
 
           echo "HTTP Status: $HTTP_CODE"
 
-          if [ "$HTTP_CODE" != "405" ]; then
-            echo "Unexpected response from endpoint"
+          if [ "$HTTP_CODE" != "200" ]; then
+            echo "HMAC verification failed"
             exit 1
           fi
 
-          grep -q '"Method not allowed"' response.json
-
-          echo "Connection test passed!"
+          grep -q 'HMAC verified' response.json
+          echo "HMAC authentication passed!"
