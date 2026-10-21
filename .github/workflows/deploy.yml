@@ -1,0 +1,44 @@
+
+name: Portfolio Deployment
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test-connection:
+    name: Test KOM.CC Connection
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Test HTTPS endpoint
+        env:
+          DEPLOY_USERNAME: ${{ secrets.DEPLOY_USERNAME }}
+          DEPLOY_PASSWORD: ${{ secrets.DEPLOY_PASSWORD }}
+        run: |
+          set -euo pipefail
+
+          HTTP_CODE=$(curl \
+            --silent \
+            --show-error \
+            --output response.json \
+            --write-out "%{http_code}" \
+            --user "$DEPLOY_USERNAME:$DEPLOY_PASSWORD" \
+            --max-time 30 \
+            "https://shirinzahra-portfolio.sfworks.top/_deploy/deploy.php")
+
+          echo "HTTP Status: $HTTP_CODE"
+
+          if [ "$HTTP_CODE" != "405" ]; then
+            echo "Unexpected response from endpoint"
+            exit 1
+          fi
+
+          grep -q '"Method not allowed"' response.json
+
+          echo "Connection test passed!"
