@@ -10,8 +10,8 @@
   --muted: #616360;
   --line: #3c3d3d;
   --white-ring: rgba(255, 255, 255, 0.6);
-  --watermark-image-light: url("../../media/watermark-black.png");
-  --watermark-image-dark: url("../../media/watermark-white.png");
+  --watermark-image-light: url("../../media/watermark-Black.png");
+  --watermark-image-dark: url("../../media/watermark-White.png");
   --watermark-image: var(--watermark-image-light);
 }
 
