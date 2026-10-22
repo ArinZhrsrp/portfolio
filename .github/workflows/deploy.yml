@@ -1,5 +1,5 @@
 
-name: Portfolio Deployment
+name: Deploy SFWorks Portfolio Arin
 
 on:
   push:
@@ -10,68 +10,102 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: sfworks-arin-production
+  cancel-in-progress: false
+
 jobs:
-  test-hmac:
-    name: Test Secure Deployment
+  deploy:
+    name: Deploy Arin to DirectAdmin
     runs-on: ubuntu-latest
+    timeout-minutes: 5
 
     steps:
-      - name: Test HMAC authentication
+      - name: Send authenticated deployment request
         env:
           DEPLOY_USERNAME: ${{ secrets.DEPLOY_USERNAME }}
           DEPLOY_PASSWORD: ${{ secrets.DEPLOY_PASSWORD }}
           DEPLOY_SECRET: ${{ secrets.DEPLOY_SECRET }}
           COMMIT_SHA: ${{ github.sha }}
+          REPOSITORY: ${{ github.repository }}
+        shell: bash
         run: |
           set -euo pipefail
 
-          # Generate timestamp
-          export TIMESTAMP=$(date +%s)
-
-          # Create request body
-          printf '{"repository":"ArinZhrsrp/portfolio","branch":"main","commit":"%s"}' \
-            "$COMMIT_SHA" > request.json
-
-          # Generate HMAC-SHA256 signature
-          SIGNATURE=$(python3 -c '
+          python3 - <<'PY'
+          import base64
           import hashlib
           import hmac
+          import json
           import os
-          from pathlib import Path
+          import time
+          import urllib.error
+          import urllib.request
 
-          message = (
-              os.environ["TIMESTAMP"] + "."
-          ).encode() + Path("request.json").read_bytes()
+          url = "https://shirinzahra-portfolio.sfworks.top/_deploy/deploy.php"
+          username = os.environ["DEPLOY_USERNAME"]
+          password = os.environ["DEPLOY_PASSWORD"]
+          secret = os.environ["DEPLOY_SECRET"]
 
+          if len(secret) != 64 or any(c not in "0123456789abcdef" for c in secret):
+              raise SystemExit("DEPLOY_SECRET must be 64 lowercase hex characters")
+
+          body = json.dumps({
+              "repository": os.environ["REPOSITORY"],
+              "branch": "main",
+              "commit": os.environ["COMMIT_SHA"]
+          }, separators=(",", ":")).encode("utf-8")
+
+          timestamp = str(int(time.time()))
           signature = hmac.new(
-              os.environ["DEPLOY_SECRET"].encode(),
-              message,
+              secret.encode("utf-8"),
+              timestamp.encode("utf-8") + b"." + body,
               hashlib.sha256
           ).hexdigest()
 
-          print(signature)
-          ')
+          credentials = base64.b64encode(
+              f"{username}:{password}".encode("utf-8")
+          ).decode("ascii")
 
-          # Send authenticated POST request
-          HTTP_CODE=$(curl \
-            --silent \
-            --show-error \
-            --output response.json \
-            --write-out "%{http_code}" \
-            --user "$DEPLOY_USERNAME:$DEPLOY_PASSWORD" \
-            --header "Content-Type: application/json" \
-            --header "X-Deploy-Timestamp: $TIMESTAMP" \
-            --header "X-Deploy-Signature: $SIGNATURE" \
-            --data-binary @request.json \
-            --max-time 30 \
-            "https://shirinzahra-portfolio.sfworks.top/_deploy/deploy.php")
+          request = urllib.request.Request(
+              url,
+              data=body,
+              method="POST",
+              headers={
+                  "Content-Type": "application/json",
+                  "Authorization": "Basic " + credentials,
+                  "X-Deploy-Timestamp": timestamp,
+                  "X-Deploy-Signature": signature,
+                  "User-Agent": "SFWorks-Arin-GitHub-Actions"
+              }
+          )
 
-          echo "HTTP Status: $HTTP_CODE"
+          try:
+              with urllib.request.urlopen(request, timeout=170) as response:
+                  result = response.read().decode("utf-8")
+                  print("HTTP:", response.status)
+                  print("Response:", result)
 
-          if [ "$HTTP_CODE" != "200" ]; then
-            echo "HMAC verification failed (HTTP $HTTP_CODE)"
-            exit 1
-          fi
+                  if response.status != 200:
+                      raise SystemExit("Deployment unsuccessful")
 
-          grep -q 'HMAC verified' response.json
-          echo "HMAC authentication passed!"
+                  parsed = json.loads(result)
+                  message = parsed.get("message", "")
+
+                  if not isinstance(message, str) or not (
+                      message.startswith("Auto-sync completed: ")
+                      or message == "Commit already deployed"
+                  ):
+                      raise SystemExit("Unexpected deployment response")
+
+                  print("Portfolio Arin deployment verified successfully")
+
+          except urllib.error.HTTPError as error:
+              print("Deployment HTTP error:", error.code)
+              print(error.read().decode("utf-8", errors="replace"))
+              raise SystemExit(1)
+
+          except urllib.error.URLError as error:
+              print("Deployment connection failed:", error.reason)
+              raise SystemExit(1)
+          PY
