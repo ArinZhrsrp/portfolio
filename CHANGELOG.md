@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 Pre-`v1.0.0` version numbers below are inferred from commit milestones because
 the early history was not tagged with release versions.
 
+## [v1.1.3] - 2026-10-26
+
+### Changed
+
+- Clean URLs: `work.html` and `personal.html` moved to `work/index.html` and
+  `personal/index.html`, so pages open as `/work/` and `/personal/`. All
+  internal links now point to `./`, `work/` and `personal/` instead of
+  `.html` files. Subfolder pages use `<base href="../" />` so shared asset
+  paths keep working.
+
+### Added
+
+- CANDID `siteLink` set to `https://candid.sfworks.top/`.
+
 ## [v1.1.2] - 2026-10-26
 
 ### Fixed
