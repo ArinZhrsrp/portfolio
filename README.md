@@ -15,9 +15,9 @@ There is no build step and no framework.
   - Redirect entry page
 - `home.html`
   - Main landing page
-- `work.html`
+- `work/index.html`
   - Work project listing
-- `personal.html`
+- `personal/index.html`
   - Personal project listing
 - `index.next.html`
   - Alternate landing-page variant
@@ -28,8 +28,8 @@ There is no build step and no framework.
 Portfolio Website/
 |- index.html
 |- home.html
-|- work.html
-|- personal.html
+|- work/index.html
+|- personal/index.html
 |- index.next.html
 |- assets/
 |  |- css/
@@ -145,7 +145,7 @@ the gallery.
    above.
 2. Put its screenshots in `assets/media/projects/<project-id>/`.
 3. Add one line loading the new file in **every** HTML page that lists
-   projects — `home.html`, `work.html`, `personal.html`, and
+   projects — `home.html`, `work/index.html`, `personal/index.html`, and
    `index.next.html` — next to the other project `<script>` tags:
 
    ```html

@@ -3,7 +3,7 @@ const portfolioData = {
     shortName: "USZ",
     eyebrow: "Software Developer Portfolio",
     title: "Ungku Shirin Zahra Portfolio",
-    version: "v1.1.2",
+    version: "v1.1.3",
     heroTitle:
       "Building reliable mobile apps with Flutter & real-world integration.",
     heroSummary:
@@ -25,7 +25,7 @@ const portfolioData = {
       eyebrow: "Company Delivery",
       description:
         "Production-focused apps built in a collaborative product environment with real user needs, delivery timelines, and stakeholder feedback.",
-      href: "work.html",
+      href: "work/",
       cta: "Explore Work",
       accent: "teal",
     },
@@ -34,7 +34,7 @@ const portfolioData = {
       eyebrow: "Independent Builds",
       description:
         "Self-initiated projects where I explore new product ideas, polish interaction details, and experiment across different platforms.",
-      href: "personal.html",
+      href: "personal/",
       cta: "Explore Personal",
       accent: "coral",
     },

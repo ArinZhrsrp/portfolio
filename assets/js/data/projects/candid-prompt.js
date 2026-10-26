@@ -9,6 +9,7 @@ portfolioData.projects.push({
     "A single-page web app that generates ready-to-paste AI image/video prompts for affiliate and UGC-style product content across TikTok, IG Reels/Feed, Facebook, Shopee/Lazada, and YouTube Shorts. Every generation randomizes lighting, pose, and scene details so batches of prompts never look templated, with a tiered AI fallback (Gemini, Groq, in-browser WebLLM, local template) powering scene suggestions and prompt enhancement.",
   stats: ["HTML/CSS/JS", "Serverless", "Gemini/Groq AI"],
   accent: "teal",
+  siteLink: "https://candid.sfworks.top/",
   repoLink: "https://github.com/ArinZhrsrp/candid",
   images: [
     "assets/media/projects/candid-prompt/1.png",

@@ -1,3 +1,3 @@
-const target = `index.html${window.location.hash || ""}`;
+const target = `./${window.location.hash || ""}`;
 
 window.location.replace(target);
