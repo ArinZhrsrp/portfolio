@@ -517,14 +517,93 @@ function setupContactForm() {
       return;
     }
 
-    form.addEventListener("submit", (event) => {
-      event.preventDefault();
-      const formData = new FormData(form);
-      const name = formData.get("name") || "";
+    const CONTACT_EMAIL = "shiwwinzahra@gmail.com";
+    const ENDPOINT = `https://formsubmit.co/ajax/${CONTACT_EMAIL}`;
+    const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+    const submitBtn = form.querySelector(".contact-submit");
+    const status = form.querySelector(".contact-status");
+    let sending = false;
 
-      alert(
-        `Thanks${name ? ", " + name : ""}! Replace this alert with your own email or backend integration.`,
-      );
+    const setStatus = (message, type = "") => {
+      if (!status) {
+        return;
+      }
+      status.textContent = message;
+      status.className = `contact-status${type ? " is-" + type : ""}`;
+    };
+
+    form.addEventListener("input", (event) => {
+      event.target.removeAttribute?.("aria-invalid");
+    });
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      if (sending) {
+        return;
+      }
+
+      const formData = new FormData(form);
+      const name = String(formData.get("name") || "").trim();
+      const email = String(formData.get("email") || "").trim();
+      const message = String(formData.get("message") || "").trim();
+
+      // Bots fill the hidden field; pretend success and drop it.
+      if (formData.get("_honey")) {
+        form.reset();
+        setStatus("Thanks! Your message has been sent.", "success");
+        return;
+      }
+
+      const invalid = [];
+      if (!name) invalid.push(["name", "Please enter your name."]);
+      if (!EMAIL_PATTERN.test(email)) invalid.push(["email", "Please enter a valid email address."]);
+      if (!message) invalid.push(["message", "Please tell me about your project."]);
+
+      form.querySelectorAll("[aria-invalid]").forEach((field) => field.removeAttribute("aria-invalid"));
+
+      if (invalid.length) {
+        invalid.forEach(([field]) => form.elements[field].setAttribute("aria-invalid", "true"));
+        form.elements[invalid[0][0]].focus();
+        setStatus(invalid[0][1], "error");
+        return;
+      }
+
+      sending = true;
+      submitBtn.disabled = true;
+      setStatus("Sending...");
+
+      try {
+        const response = await fetch(ENDPOINT, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            name,
+            email,
+            message,
+            _subject: `Portfolio inquiry from ${name}`,
+            _template: "table",
+            _captcha: "false",
+          }),
+        });
+        const result = await response.json().catch(() => ({}));
+
+        if (!response.ok || String(result.success) !== "true") {
+          throw new Error(result.message || `HTTP ${response.status}`);
+        }
+
+        form.reset();
+        setStatus(`Thanks, ${name}! Your message has been sent. I'll get back to you soon.`, "success");
+      } catch (error) {
+        console.error("Contact form failed:", error);
+        setStatus(`Sorry, the message could not be sent. Please email me directly at ${CONTACT_EMAIL}.`, "error");
+      } finally {
+        sending = false;
+        submitBtn.disabled = false;
+      }
     });
   }
 

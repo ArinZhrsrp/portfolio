@@ -1099,8 +1099,51 @@ code {
   color: #8a8d88;
 }
 
+.input:focus-visible,
+.textarea:focus-visible {
+  border-color: var(--teal);
+  box-shadow: 0 0 0 3px var(--teal-soft);
+}
+
+.input[aria-invalid="true"],
+.textarea[aria-invalid="true"] {
+  border-color: var(--coral);
+}
+
+.contact-honeypot {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
 .contact-submit {
   margin-top: 16px;
+}
+
+.contact-submit:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.contact-status {
+  margin: 12px 0 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.contact-status:empty {
+  display: none;
+}
+
+.contact-status.is-success {
+  color: #2f7d74;
+}
+
+.contact-status.is-error {
+  color: #c0453b;
 }
 
 .scroll-top-btn {

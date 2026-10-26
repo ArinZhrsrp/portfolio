@@ -311,25 +311,41 @@
                 </div>
               </div>
 
-              <form class="contact-form" id="contactForm">
+              <form class="contact-form" id="contactForm" novalidate>
                 <div class="form-stack">
                   <input
                     class="input"
                     type="text"
                     name="name"
                     placeholder="Your name"
+                    autocomplete="name"
+                    maxlength="100"
+                    required
                   />
                   <input
                     class="input"
                     type="email"
                     name="email"
                     placeholder="Email address"
+                    autocomplete="email"
+                    maxlength="254"
+                    required
                   />
                   <textarea
                     class="textarea"
                     name="message"
                     placeholder="Tell me about your project"
+                    maxlength="5000"
+                    required
                   ></textarea>
+                  <input
+                    class="contact-honeypot"
+                    type="text"
+                    name="_honey"
+                    tabindex="-1"
+                    autocomplete="off"
+                    aria-hidden="true"
+                  />
                 </div>
 
                 <button class="action-btn teal contact-submit" type="submit">
@@ -341,6 +357,7 @@
                     </svg>
                   </span>
                 </button>
+                <p class="contact-status" role="status" aria-live="polite"></p>
               </form>
             </div>
           </section>

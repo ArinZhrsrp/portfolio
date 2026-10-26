@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 Pre-`v1.0.0` version numbers below are inferred from commit milestones because
 the early history was not tagged with release versions.
 
+## [v1.1.2] - 2026-10-26
+
+### Fixed
+
+- The contact form now actually sends inquiries (via FormSubmit to
+  `shiwwinzahra@gmail.com`) instead of showing a placeholder alert. Adds
+  field validation, a sending state, inline success/error messages, a spam
+  honeypot, and a direct-email fallback if sending fails.
+
+### Changed
+
+- Updated the PomoPaw `siteLink` to `https://pomopaw.sfworks.top/`.
+- Renamed the CANDID stat "Vercel Serverless" to "Serverless".
+
+### Removed
+
+- Removed `vercel.json` and all remaining Vercel references.
+- Removed the CANDID `siteLink` (`candid-prompt.vercel.app`); its card now
+  shows only "View Code".
+
 ## [v1.1.1] - 2026-07-15
 
 ### Added
